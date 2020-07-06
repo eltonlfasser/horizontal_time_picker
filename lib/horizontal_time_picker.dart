@@ -25,6 +25,7 @@ class HorizontalTimePicker extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final int maxSelectedDateCount;
   final bool showDisabled;
+  final bool showTodaysExpiredSlots;
   final List<DateTime> disabledTimeSlots;
 
   HorizontalTimePicker(
@@ -46,6 +47,7 @@ class HorizontalTimePicker extends StatefulWidget {
       this.initialSelectedDates,
       this.spacingBetweenDates = 8.0,
       this.showDisabled = true,
+      this.showTodaysExpiredSlots = true,
       this.padding = const EdgeInsets.all(12.0),
       this.disabledTimeSlots})
       : assert(startTimeInHour != null),
@@ -98,7 +100,8 @@ class _HorizontalTimePickerState extends State<HorizontalTimePicker> {
         widget.startTimeInHour,
         widget.endTimeInHour,
         widget.timeIntervalInMinutes,
-        widget.dateForTime));
+        widget.dateForTime,
+        widget.showTodaysExpiredSlots));
     selectedDateTimeSlots
         .addAll(getInitialSelectedTimeSlotsList(widget.initialSelectedDates));
   }

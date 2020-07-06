@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
             DateTime(2020, 07, 06, 11, 30, 0, 0, 0),
             DateTime(2020, 07, 07, 10, 30, 0, 0, 0)
           ],
+          showTodaysExpiredSlots: true,
           selectedTimeTextStyle: TextStyle(
             color: Colors.white,
             fontFamily: "Helvetica Neue",

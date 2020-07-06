@@ -1,7 +1,11 @@
 import 'package:horizontal_time_picker/horizontal_time_picker.dart';
 
-List<TimeUnit> getDateTimeSlotList(int startTimeInHour, int endTimeInHour,
-    int timeIntervalInMinutes, DateTime dateForTime) {
+List<TimeUnit> getDateTimeSlotList(
+    int startTimeInHour,
+    int endTimeInHour,
+    int timeIntervalInMinutes,
+    DateTime dateForTime,
+    bool showTodaysExpiredSlots) {
   DateTime startDateTime = DateTime(dateForTime.year, dateForTime.month,
       dateForTime.day, startTimeInHour, 0, 0, 0, 0);
   DateTime endDateTime = DateTime(dateForTime.year, dateForTime.month,
@@ -9,7 +13,12 @@ List<TimeUnit> getDateTimeSlotList(int startTimeInHour, int endTimeInHour,
   DateTime nextTime = startDateTime;
   List<TimeUnit> timeSlots = [];
   while (endDateTime.difference(nextTime) > Duration(minutes: 0)) {
-    timeSlots.add(TimeUnit(nextTime.hour, nextTime.minute));
+    if (showTodaysExpiredSlots) {
+      timeSlots.add(TimeUnit(nextTime.hour, nextTime.minute));
+    } else {
+      if (nextTime.difference(DateTime.now()) > Duration(minutes: 0))
+        timeSlots.add(TimeUnit(nextTime.hour, nextTime.minute));
+    }
     nextTime = nextTime.add(Duration(minutes: timeIntervalInMinutes));
   }
 
