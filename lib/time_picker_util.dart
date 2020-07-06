@@ -50,7 +50,6 @@ isTimeSlotDisabled(DateTime dateForTime, TimeUnit timeSlot,
       disabledTimeSlots.forEach((date) {
         if (selectedDateTime.difference(date) == Duration(seconds: 0))
           gotDisabledDate = true;
-        print(selectedDateTime.difference(date));
       });
     }
   }
