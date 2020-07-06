@@ -2,14 +2,17 @@ import 'package:horizontal_time_picker/horizontal_time_picker.dart';
 
 List<TimeUnit> getDateTimeSlotList(int startTimeInHour, int endTimeInHour,
     int timeIntervalInMinutes, DateTime dateForTime) {
+  DateTime startDateTime = DateTime(dateForTime.year, dateForTime.month,
+      dateForTime.day, startTimeInHour, 0, 0, 0, 0);
+  DateTime endDateTime = DateTime(dateForTime.year, dateForTime.month,
+      dateForTime.day, endTimeInHour, 0, 0, 0, 0);
+  DateTime nextTime = startDateTime;
   List<TimeUnit> timeSlots = [];
-  for (int i = startTimeInHour; i < endTimeInHour; i++) {
-    int intervalDerived = 0;
-    while (intervalDerived < 60) {
-      timeSlots.add(TimeUnit(i, intervalDerived));
-      intervalDerived = intervalDerived + timeIntervalInMinutes;
-    }
+  while (endDateTime.difference(nextTime) > Duration(minutes: 0)) {
+    timeSlots.add(TimeUnit(nextTime.hour, nextTime.minute));
+    nextTime = nextTime.add(Duration(minutes: timeIntervalInMinutes));
   }
+
   return timeSlots;
 }
 
@@ -24,13 +27,25 @@ List<TimeUnit> getInitialSelectedTimeSlotsList(
   return timeSlots;
 }
 
-isTimeSlotDisabled(DateTime dateForTime, TimeUnit timeSlot) {
+isTimeSlotDisabled(DateTime dateForTime, TimeUnit timeSlot,
+    {List<DateTime> disabledTimeSlots}) {
   DateTime selectedDateTime = DateTime(dateForTime.year, dateForTime.month,
       dateForTime.day, timeSlot.hour, timeSlot.minute, 0, 0, 0);
+  bool gotDisabledDate = false;
   if (selectedDateTime.isBefore(DateTime.now())) {
-    return true;
+    gotDisabledDate = true;
+  } else {
+    if (disabledTimeSlots == null || disabledTimeSlots.length == 0) {
+      gotDisabledDate = false;
+    } else {
+      disabledTimeSlots.forEach((date) {
+        if (selectedDateTime.difference(date) == Duration(seconds: 0))
+          gotDisabledDate = true;
+        print(selectedDateTime.difference(date));
+      });
+    }
   }
-  return false;
+  return gotDisabledDate;
 }
 
 isTimeSlotSelected(

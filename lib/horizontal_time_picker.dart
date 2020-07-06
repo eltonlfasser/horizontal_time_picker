@@ -25,28 +25,30 @@ class HorizontalTimePicker extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final int maxSelectedDateCount;
   final bool showDisabled;
+  final List<DateTime> disabledTimeSlots;
 
-  HorizontalTimePicker({
-    Key key,
-    this.height = 100,
-    this.timeIntervalInMinutes = 15,
-    @required this.startTimeInHour,
-    @required this.endTimeInHour,
-    @required this.dateForTime,
-    this.scrollController,
-    this.onTimeSelected,
-    this.onTimeUnSelected,
-    this.maxSelectedDateCount = 1,
-    this.timeTextStyle,
-    this.selectedTimeTextStyle,
-    this.defaultDecoration,
-    this.selectedDecoration,
-    this.disabledDecoration,
-    this.initialSelectedDates,
-    this.spacingBetweenDates = 8.0,
-    this.showDisabled = true,
-    this.padding = const EdgeInsets.all(12.0),
-  })  : assert(startTimeInHour != null),
+  HorizontalTimePicker(
+      {Key key,
+      this.height = 100,
+      this.timeIntervalInMinutes = 15,
+      @required this.startTimeInHour,
+      @required this.endTimeInHour,
+      @required this.dateForTime,
+      this.scrollController,
+      this.onTimeSelected,
+      this.onTimeUnSelected,
+      this.maxSelectedDateCount = 1,
+      this.timeTextStyle,
+      this.selectedTimeTextStyle,
+      this.defaultDecoration,
+      this.selectedDecoration,
+      this.disabledDecoration,
+      this.initialSelectedDates,
+      this.spacingBetweenDates = 8.0,
+      this.showDisabled = true,
+      this.padding = const EdgeInsets.all(12.0),
+      this.disabledTimeSlots})
+      : assert(startTimeInHour != null),
         assert(dateForTime != null),
         assert(endTimeInHour != null),
         assert(
@@ -113,7 +115,8 @@ class _HorizontalTimePickerState extends State<HorizontalTimePicker> {
           itemBuilder: (context, index) {
             final timeSlotIterated = allDateTimeSlots[index];
             if (!widget.showDisabled &&
-                isTimeSlotDisabled(widget.dateForTime, timeSlotIterated)) {
+                isTimeSlotDisabled(widget.dateForTime, timeSlotIterated,
+                    disabledTimeSlots: widget.disabledTimeSlots)) {
               return Container();
             }
             return Row(
@@ -122,9 +125,12 @@ class _HorizontalTimePickerState extends State<HorizontalTimePicker> {
                   key: Key(timeSlotIterated._time),
                   padding: widget.padding,
                   isSelected: isTimeSlotSelected(
-                      selectedDateTimeSlots, timeSlotIterated),
-                  isDisabled:
-                      isTimeSlotDisabled(widget.dateForTime, timeSlotIterated),
+                    selectedDateTimeSlots,
+                    timeSlotIterated,
+                  ),
+                  isDisabled: isTimeSlotDisabled(
+                      widget.dateForTime, timeSlotIterated,
+                      disabledTimeSlots: widget.disabledTimeSlots),
                   date: widget.dateForTime,
                   timeUnit: timeSlotIterated,
                   timeTextStyle: widget.timeTextStyle,

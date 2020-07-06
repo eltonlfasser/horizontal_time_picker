@@ -37,6 +37,12 @@ class _MyHomePageState extends State<MyHomePage> {
           startTimeInHour: 9,
           endTimeInHour: 24,
           dateForTime: DateTime.now(),
+          disabledTimeSlots: [
+            // DateTime.now().add(Duration(hours: 1)),
+            DateTime(2020, 07, 06, 12, 0, 0, 0, 0),
+            DateTime(2020, 07, 06, 11, 30, 0, 0, 0),
+            DateTime(2020, 07, 07, 10, 30, 0, 0, 0)
+          ],
           selectedTimeTextStyle: TextStyle(
             color: Colors.white,
             fontFamily: "Helvetica Neue",
